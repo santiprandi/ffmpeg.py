@@ -8,6 +8,8 @@
 # TODO should i have into account that subprocess.run does not work on python 3.4 or earlier?
 # TODO check conflicting options:
 # https://docs.python.org/3/howto/argparse.html#conflicting-options
+# TODO check solution 9 subparsers
+# https://izziswift.com/python-argparse-make-at-least-one-argument-required/
 
 import subprocess
 import argparse
@@ -39,6 +41,6 @@ if args.action == "gif-to-mp4":
     # -vf – MP4 videos using H.264 need to have a dimensions that are divisible by 2.
     # This option ensures that’s the case.
 
-# Sources:
+# Resources:
 # https://coderzcolumn.com/tutorials/python/argparse-simple-guide-to-command-line-arguments-handling-in-python
 # https://docs.python.org/3/howto/argparse.html
