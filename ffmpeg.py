@@ -6,6 +6,8 @@
 # Only tested on Linux.
 
 # TODO should i have into account that subprocess.run does not work on python 3.4 or earlier?
+# TODO check conflicting options:
+# https://docs.python.org/3/howto/argparse.html#conflicting-options
 
 import subprocess
 import argparse
@@ -38,4 +40,5 @@ if args.action == "gif-to-mp4":
     # This option ensures that’s the case.
 
 # Sources:
-# Argument parser: https://coderzcolumn.com/tutorials/python/argparse-simple-guide-to-command-line-arguments-handling-in-python
+# https://coderzcolumn.com/tutorials/python/argparse-simple-guide-to-command-line-arguments-handling-in-python
+# https://docs.python.org/3/howto/argparse.html
