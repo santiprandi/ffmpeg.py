@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # ffmpeg wrapper with useful commands.
-# v0.2
+# v0.3
 # Recommended Python version: 3.9 or above.
 # Only tested on Linux.
 
@@ -20,10 +20,13 @@ def main():
     gif_to_mp4_parser = subparsers.add_parser(
         "gif-to-mp4", help="optimize a gif for web usage")
     gif_to_mp4_parser.add_argument("input", help="input file name")
-    gif_to_mp4_parser.add_argument("output", help="output file name")
+    gif_to_mp4_parser.add_argument(
+        "output", help="output file name with .mp4 extension")
 
     extract_audio_parser = subparsers.add_parser(
         "extract-audio", help="extract audio from file without reencoding")
+    extract_audio_parser.add_argument("input", help="input file name")
+    extract_audio_parser.add_argument("output", help="output file name")
 
     trim_parser = subparsers.add_parser(
         "trim", help="trim a file without re-encoding")
@@ -33,14 +36,10 @@ def main():
 
     args = parser.parse_args()
 
-    print(args)
-
-    # parser.add_argument("input", help="input file")
-    # parser.add_argument(
-    #     "-o", "--output", help="output file", action="store")
-
     if args.subparser == "gif-to-mp4":
         gif_to_mp4(args)
+    elif args.subparser == "extract-audio":
+        extract_audio(args)
 
 
 def gif_to_mp4(args):
@@ -61,9 +60,22 @@ def gif_to_mp4(args):
     # This option ensures that’s the case.
 
 
+def extract_audio(args):
+    subprocess.run(["ffmpeg",
+                    "-i", args.input,
+                    "-vn",
+                    "-acodec", "copy",
+                    args.output])
+    # -vn - No video.
+    # -acodec copy - Use the same audio stream that's already in there.
+
+
 if __name__ == "__main__":
     main()
 
-# Resources:
+# Resources about argparse:
 # https://coderzcolumn.com/tutorials/python/argparse-simple-guide-to-command-line-arguments-handling-in-python
 # https://docs.python.org/3/howto/argparse.html
+# https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser.add_subparsers
+
+# Resources about ffmpeg:
