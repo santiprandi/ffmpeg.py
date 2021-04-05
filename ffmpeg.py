@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 
 # ffmpeg wrapper with useful commands.
-# v0.3
+# v0.4
 # Recommended Python version: 3.9 or above.
 # Only tested on Linux.
 
-# TODO should i have into account that subprocess.run does not work on python 3.4 or earlier?
+# TODO Should I have into account that subprocess.run does not work on python 3.4 or earlier?
 
 import subprocess
 import argparse
 
 
 def main():
-    # create top-level parser
+    # Create top-level parser
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="subparser")
 
-    # other parsers
+    # Other parsers
     gif_to_mp4_parser = subparsers.add_parser(
         "gif-to-mp4", help="optimize a gif for web usage")
     gif_to_mp4_parser.add_argument("input", help="input file name")
@@ -30,6 +30,12 @@ def main():
 
     trim_parser = subparsers.add_parser(
         "trim", help="trim a file without re-encoding")
+    trim_parser.add_argument("input", help="input file name")
+    trim_parser.add_argument("output", help="output file name")
+    trim_parser.add_argument(
+        "start", help="the start of the section to trim (HH:MM:SS)")
+    trim_parser.add_argument(
+        "end", help="the end of the section to trim (HH:MM:SS)")
 
     nv_parser = subparsers.add_parser(
         "nv", help="tools with NVIDIA transcoder")
@@ -40,6 +46,8 @@ def main():
         gif_to_mp4(args)
     elif args.subparser == "extract-audio":
         extract_audio(args)
+    elif args.subparser == "trim":
+        trim(args)
 
 
 def gif_to_mp4(args):
@@ -68,6 +76,25 @@ def extract_audio(args):
                     args.output])
     # -vn - No video.
     # -acodec copy - Use the same audio stream that's already in there.
+
+
+def trim(args):
+    # TODO Improve. Maybe make start and end optional. Add option for duation to trim insted of end time.
+    subprocess.run(["ffmpeg",
+                    "-i", args.input,
+                    "-ss", args.start,
+                    "-to", args.end,
+                    args.output])
+    # -ss HH:MM:SS - It defines the start of the section that you want to
+    # trim.
+
+    # -to HH:MM:SS - It's the end of the section that you want to trim.
+
+    # -c copy - This is an option meaning trimming video via stream copy,
+    # which is fast and will not re-encode video.
+
+    # -t HH:MM:SS - Instead of -to. It means the duration of the section to trim,
+    # rather than the end time.
 
 
 if __name__ == "__main__":
